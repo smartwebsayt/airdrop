@@ -1,0 +1,855 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="https://static.readdy.ai/static/e.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartCash - Modern Trading Platform</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#57b5e7',secondary:'#8dd3c7'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+:where([class^="ri-"])::before { content: "\f3c2"; }
+.gradient-bg {
+background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+background-attachment: fixed;
+}
+.card-shadow {
+box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.05);
+backdrop-filter: blur(8px);
+background: rgba(255, 255, 255, 0.95);
+border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.modal-backdrop { backdrop-filter: blur(12px); }
+.glass-effect {
+background: rgba(255, 255, 255, 0.8);
+backdrop-filter: blur(12px);
+border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.hover-scale {
+transition: transform 0.2s ease-in-out;
+}
+.hover-scale:hover {
+transform: scale(1.02);
+}
+body {
+font-family: 'Space Grotesk', sans-serif;
+}
+.modern-input {
+background: rgba(255, 255, 255, 0.9);
+border: 1px solid rgba(87, 181, 231, 0.2);
+transition: all 0.3s ease;
+}
+.modern-input:focus {
+background: white;
+border-color: #57b5e7;
+box-shadow: 0 0 0 4px rgba(87, 181, 231, 0.1);
+}
+.btn-modern {
+transition: all 0.3s ease;
+position: relative;
+overflow: hidden;
+}
+.btn-modern::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: linear-gradient(45deg, transparent 0%, rgba(255, 255, 255, 0.2) 50%, transparent 100%);
+transform: translateX(-100%);
+transition: transform 0.6s ease;
+}
+.btn-modern:hover::before {
+transform: translateX(100%);
+}
+</style>
+</head>
+<body class="gradient-bg min-h-screen">
+<!-- Header Navigation -->
+<header class="glass-effect sticky top-0 z-50">
+<div class="px-6 py-3 max-w-7xl mx-auto">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-12">
+<div class="flex items-center">
+<h1 class="font-['Pacifico'] text-3xl bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent hover:scale-105 transition-transform cursor-pointer">SmartCash</h1>
+<div class="ml-2 px-2 py-1 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-full">
+<span class="text-xs font-medium text-primary">BETA</span>
+</div>
+</div>
+<nav class="hidden md:flex items-center space-x-1">
+<a href="#" class="relative group px-4 py-2">
+<span class="relative z-10 text-gray-700 group-hover:text-primary transition-colors font-medium">Home</span>
+<div class="absolute inset-0 h-full w-full bg-gray-50 rounded-lg scale-0 group-hover:scale-100 transition-transform origin-center"></div>
+</a>
+<a href="#" class="relative group px-4 py-2">
+<span class="relative z-10 text-gray-700 group-hover:text-primary transition-colors font-medium">Market</span>
+<div class="absolute inset-0 h-full w-full bg-gray-50 rounded-lg scale-0 group-hover:scale-100 transition-transform origin-center"></div>
+</a>
+<a href="#" class="relative group px-4 py-2">
+<span class="relative z-10 text-gray-700 group-hover:text-primary transition-colors font-medium">Trade</span>
+<div class="absolute inset-0 h-full w-full bg-gray-50 rounded-lg scale-0 group-hover:scale-100 transition-transform origin-center"></div>
+</a>
+<a href="#" class="relative group px-4 py-2">
+<span class="relative z-10 text-primary font-medium">Profile</span>
+<div class="absolute inset-0 h-full w-full bg-primary/10 rounded-lg scale-100"></div>
+</a>
+</nav>
+</div>
+<div class="flex items-center space-x-6">
+<div class="hidden md:flex items-center space-x-3">
+<button onclick="openModal('login')" class="btn-modern px-6 py-2 !rounded-button font-medium text-gray-700 hover:text-primary transition-colors whitespace-nowrap">Log In</button>
+<button onclick="openModal('register')" class="btn-modern bg-primary text-white px-6 py-2 !rounded-button font-medium hover:bg-opacity-90 transition-colors whitespace-nowrap hover:shadow-lg hover:-translate-y-0.5">Register</button>
+</div>
+<div class="flex items-center space-x-4">
+<div class="w-10 h-10 flex items-center justify-center bg-gray-50 rounded-full hover:bg-gray-100 transition-colors cursor-pointer relative group">
+<i class="ri-notification-3-line text-xl text-gray-600 group-hover:text-primary transition-colors"></i>
+<div class="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></div>
+</div>
+<div class="flex items-center space-x-3 bg-gradient-to-r from-gray-50 to-gray-100 hover:from-gray-100 hover:to-gray-200 transition-colors rounded-full px-4 py-2 cursor-pointer group">
+<div class="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
+<span class="text-white text-sm font-medium">JD</span>
+</div>
+<div class="hidden md:block">
+<p class="text-sm font-medium text-gray-900">John Davis</p>
+<p class="text-xs text-gray-500">$12,450.00</p>
+</div>
+<div class="w-4 h-4 flex items-center justify-center">
+<i class="ri-arrow-down-s-line text-gray-400 group-hover:text-gray-600 transition-colors"></i>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<main class="px-6 py-8 max-w-7xl mx-auto">
+<!-- Profile Dashboard -->
+<!-- Market Overview -->
+<div class="bg-white rounded-xl card-shadow p-6 mb-8 hover-scale">
+<div class="flex items-center justify-between mb-6">
+<div>
+<h3 class="text-lg font-bold text-gray-900">Market Overview</h3>
+<p class="text-sm text-gray-500">CTP/USDT</p>
+</div>
+<div class="flex items-center space-x-4">
+<div class="flex items-center space-x-2">
+<span class="text-2xl font-bold text-gray-900">$2,145.80</span>
+<span class="text-sm font-medium text-green-600">+5.23%</span>
+</div>
+<div class="flex items-center space-x-2">
+<button class="w-10 h-10 flex items-center justify-center bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+<i class="ri-time-line text-gray-600"></i>
+</button>
+<button class="w-10 h-10 flex items-center justify-center bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+<i class="ri-line-chart-line text-gray-600"></i>
+</button>
+</div>
+</div>
+</div>
+<div id="priceChart" class="w-full h-[400px]"></div>
+<div class="grid grid-cols-4 gap-4 mt-6">
+<div class="bg-gray-50 rounded-lg p-4">
+<p class="text-sm text-gray-600 mb-1">24h Volume</p>
+<p class="text-lg font-bold text-gray-900">$12.5M</p>
+</div>
+<div class="bg-gray-50 rounded-lg p-4">
+<p class="text-sm text-gray-600 mb-1">24h High</p>
+<p class="text-lg font-bold text-gray-900">$2,198.50</p>
+</div>
+<div class="bg-gray-50 rounded-lg p-4">
+<p class="text-sm text-gray-600 mb-1">24h Low</p>
+<p class="text-lg font-bold text-gray-900">$2,082.30</p>
+</div>
+<div class="bg-gray-50 rounded-lg p-4">
+<p class="text-sm text-gray-600 mb-1">Market Cap</p>
+<p class="text-lg font-bold text-gray-900">$425.2M</p>
+</div>
+</div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+<!-- Profile Card -->
+<div class="bg-white rounded-xl card-shadow p-6 hover-scale">
+<div class="text-center mb-6">
+<div class="w-20 h-20 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mb-4 flex items-center justify-center">
+<span class="text-white text-2xl font-bold">JD</span>
+</div>
+<h2 class="text-xl font-bold text-gray-900 mb-1">John Davis</h2>
+<div class="flex items-center justify-center space-x-2">
+<div class="w-3 h-3 bg-green-500 rounded-full"></div>
+<span class="text-sm text-green-600 font-medium">Verified Account</span>
+</div>
+</div>
+<div class="bg-gray-50 rounded-lg p-4 mb-6">
+<p class="text-sm text-gray-600 mb-1">Total Portfolio Value</p>
+<p class="text-2xl font-bold text-gray-900">$12,450.00</p>
+<p class="text-sm text-green-600">+$1,250.00 (11.2%)</p>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<button class="btn-modern bg-primary text-white px-6 py-3 !rounded-button font-medium hover:bg-opacity-90 transition-all whitespace-nowrap hover:shadow-lg hover:-translate-y-0.5" onclick="openModal('deposit')">
+<div class="w-4 h-4 flex items-center justify-center inline-block mr-2">
+<i class="ri-add-line"></i>
+</div>
+Deposit
+</button>
+<button class="btn-modern bg-white border border-gray-200 text-gray-700 px-6 py-3 !rounded-button font-medium hover:border-primary hover:text-primary transition-all whitespace-nowrap hover:shadow-lg hover:-translate-y-0.5" onclick="openModal('withdraw')">
+<div class="w-4 h-4 flex items-center justify-center inline-block mr-2">
+<i class="ri-subtract-line"></i>
+</div>
+Withdraw
+</button>
+</div>
+</div>
+<!-- Balance Overview -->
+<div class="bg-white rounded-xl card-shadow p-6 hover-scale">
+<h3 class="text-lg font-bold text-gray-900 mb-6">Balance Overview</h3>
+<div class="space-y-4">
+<div class="flex justify-between items-center p-4 bg-blue-50 rounded-lg">
+<div>
+<p class="text-sm text-gray-600">Available USDT</p>
+<p class="text-xl font-bold text-gray-900">$8,450.00</p>
+</div>
+<div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+<i class="ri-money-dollar-circle-line text-2xl text-blue-600"></i>
+</div>
+</div>
+<div class="flex justify-between items-center p-4 bg-green-50 rounded-lg">
+<div>
+<p class="text-sm text-gray-600">Coin Holdings</p>
+<p class="text-xl font-bold text-gray-900">2,000 CTP</p>
+</div>
+<div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+<i class="ri-coin-line text-2xl text-green-600"></i>
+</div>
+</div>
+<div class="flex justify-between items-center p-4 bg-purple-50 rounded-lg">
+<div>
+<p class="text-sm text-gray-600">Total Value</p>
+<p class="text-xl font-bold text-gray-900">$12,450.00</p>
+</div>
+<div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+<i class="ri-wallet-3-line text-2xl text-purple-600"></i>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Actions -->
+<div class="bg-white rounded-xl card-shadow p-6 hover-scale">
+<h3 class="text-lg font-bold text-gray-900 mb-6">Quick Actions</h3>
+<div class="space-y-3">
+<button class="w-full bg-primary text-white px-4 py-3 !rounded-button font-medium hover:bg-opacity-90 transition-colors whitespace-nowrap flex items-center justify-center">
+<div class="w-5 h-5 flex items-center justify-center mr-3">
+<i class="ri-shopping-cart-line"></i>
+</div>
+Buy Coins
+</button>
+<button class="w-full bg-secondary text-white px-4 py-3 !rounded-button font-medium hover:bg-opacity-90 transition-colors whitespace-nowrap flex items-center justify-center">
+<div class="w-5 h-5 flex items-center justify-center mr-3">
+<i class="ri-sell-line"></i>
+</div>
+Sell Coins
+</button>
+<button class="w-full bg-gray-200 text-gray-700 px-4 py-3 !rounded-button font-medium hover:bg-gray-300 transition-colors whitespace-nowrap flex items-center justify-center">
+<div class="w-5 h-5 flex items-center justify-center mr-3">
+<i class="ri-history-line"></i>
+</div>
+View History
+</button>
+</div>
+</div>
+</div>
+<!-- Trading Section -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+<!-- Buy Section -->
+<div class="bg-white rounded-xl card-shadow p-6 hover-scale">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-bold text-gray-900">Buy Coins</h3>
+<div class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+Rate: 1 USDT = 1 CTP
+</div>
+</div>
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Amount (USDT)</label>
+<div class="relative">
+<input type="number" id="buyAmount" class="modern-input w-full px-6 py-4 rounded-lg text-lg" placeholder="0.00" min="10" step="0.01">
+<div class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-money-dollar-circle-line"></i>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-gray-50 rounded-lg p-4">
+<div class="flex justify-between items-center">
+<span class="text-sm text-gray-600">You will receive:</span>
+<span class="text-lg font-bold text-gray-900" id="buyReceive">0 CTP</span>
+</div>
+</div>
+<div class="text-xs text-gray-500">
+<p>Minimum purchase: $10.00 USDT</p>
+<p>Transaction fee: 0.5%</p>
+</div>
+<button class="w-full bg-primary text-white px-4 py-3 !rounded-button font-medium hover:bg-opacity-90 transition-colors whitespace-nowrap">
+Buy Now
+</button>
+</div>
+</div>
+<!-- Sell Section -->
+<div class="bg-white rounded-xl card-shadow p-6 hover-scale">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-bold text-gray-900">Sell Coins</h3>
+<div class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+Rate: 1 SMC = 2 USDT
+</div>
+</div>
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Coin Amount (CTP)</label>
+<div class="relative">
+<input type="number" id="sellAmount" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-lg" placeholder="0" min="1" step="1">
+<div class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-coin-line"></i>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-gray-50 rounded-lg p-4">
+<div class="flex justify-between items-center">
+<span class="text-sm text-gray-600">You will receive:</span>
+<span class="text-lg font-bold text-gray-900" id="sellReceive">$0.00 USDT</span>
+</div>
+</div>
+<div class="text-xs text-gray-500">
+<p>Available to sell: 2,000 SMC</p>
+<p>Transaction fee: 0.5%</p>
+<p class="text-yellow-600 mt-1">Note: Funds will be released after 1 week from selling date</p>
+</div>
+<button class="w-full bg-secondary text-white px-4 py-3 !rounded-button font-medium hover:bg-opacity-90 transition-colors whitespace-nowrap">
+Sell Now
+</button>
+</div>
+</div>
+</div>
+<!-- Transaction History -->
+<div class="bg-white rounded-xl card-shadow p-6 hover-scale">
+<h3 class="text-lg font-bold text-gray-900 mb-6">Recent Transactions</h3>
+<div class="overflow-x-auto">
+<table class="w-full">
+<thead>
+<tr class="border-b border-gray-200">
+<th class="text-left py-3 px-4 font-medium text-gray-700">Date & Time</th>
+<th class="text-left py-3 px-4 font-medium text-gray-700">Type</th>
+<th class="text-left py-3 px-4 font-medium text-gray-700">Amount</th>
+<th class="text-left py-3 px-4 font-medium text-gray-700">Rate</th>
+<th class="text-left py-3 px-4 font-medium text-gray-700">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-200">
+<tr class="hover:bg-gray-50">
+<td class="py-4 px-4 text-sm text-gray-900">2025-08-09 10:15</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 shadow-sm">
+<div class="w-3 h-3 flex items-center justify-center mr-1">
+<i class="ri-sell-line"></i>
+</div>
+Sell
+</span>
+</td>
+<td class="py-4 px-4 text-sm text-gray-900">300 SMC</td>
+<td class="py-4 px-4 text-sm text-gray-900">1:2</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+<div class="w-3 h-3 flex items-center justify-center">
+<i class="ri-time-line"></i>
+</div>
+Pending (Release: 2025-08-16)
+</span>
+</td>
+</tr>
+<tr class="hover:bg-gray-50">
+<td class="py-4 px-4 text-sm text-gray-900">2025-08-08 14:32</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+<div class="w-3 h-3 flex items-center justify-center mr-1">
+<i class="ri-shopping-cart-line"></i>
+</div>
+Buy
+</span>
+</td>
+<td class="py-4 px-4 text-sm text-gray-900">500 SMC</td>
+<td class="py-4 px-4 text-sm text-gray-900">1:1</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Completed</span>
+</td>
+</tr>
+<tr class="hover:bg-gray-50">
+<td class="py-4 px-4 text-sm text-gray-900">2025-08-02 09:15</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 shadow-sm">
+<div class="w-3 h-3 flex items-center justify-center mr-1">
+<i class="ri-sell-line"></i>
+</div>
+Sell
+</span>
+</td>
+<td class="py-4 px-4 text-sm text-gray-900">250 SMC</td>
+<td class="py-4 px-4 text-sm text-gray-900">1:2</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+<div class="w-3 h-3 flex items-center justify-center">
+<i class="ri-time-line"></i>
+</div>
+Pending (Release: 2025-08-09)
+</span>
+</td>
+</tr>
+<tr class="hover:bg-gray-50">
+<td class="py-4 px-4 text-sm text-gray-900">2025-08-01 16:45</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+<div class="w-3 h-3 flex items-center justify-center mr-1">
+<i class="ri-add-line"></i>
+</div>
+Deposit
+</span>
+</td>
+<td class="py-4 px-4 text-sm text-gray-900">$1,000.00</td>
+<td class="py-4 px-4 text-sm text-gray-900">-</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Completed</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+<!-- Deposit Modal -->
+<div id="depositModal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center">
+<div class="bg-white rounded-xl p-6 w-full max-w-md mx-4">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-xl font-bold text-gray-900">Deposit Funds</h3>
+<button onclick="closeModal('deposit')" class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600">
+<i class="ri-close-line text-xl"></i>
+</button>
+</div>
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Payment Method</label>
+<div class="grid grid-cols-2 gap-3">
+<button class="flex items-center justify-center p-3 border border-gray-300 rounded-lg hover:border-primary hover:bg-blue-50 transition-colors">
+<div class="w-6 h-6 flex items-center justify-center mr-2">
+<i class="ri-bank-card-line text-primary"></i>
+</div>
+<span class="text-sm font-medium">Card</span>
+</button>
+<button class="flex items-center justify-center p-3 border border-gray-300 rounded-lg hover:border-primary hover:bg-blue-50 transition-colors">
+<div class="w-6 h-6 flex items-center justify-center mr-2">
+<i class="ri-bank-line text-primary"></i>
+</div>
+<span class="text-sm font-medium">Bank</span>
+</button>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Amount (USDT)</label>
+<input type="number" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="0.00" min="10" step="0.01">
+</div>
+<div class="bg-gray-50 rounded-lg p-4">
+<div class="flex justify-between text-sm">
+<span class="text-gray-600">Transaction Fee:</span>
+<span class="text-gray-900">$2.50</span>
+</div>
+<div class="flex justify-between text-sm font-medium mt-2">
+<span class="text-gray-900">Total:</span>
+<span class="text-gray-900">$102.50</span>
+</div>
+</div>
+<button class="w-full bg-primary text-white px-4 py-3 !rounded-button font-medium hover:bg-opacity-90 transition-colors whitespace-nowrap">
+Confirm Deposit
+</button>
+</div>
+</div>
+</div>
+<!-- Withdraw Modal -->
+<div id="withdrawModal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center">
+<div class="bg-white rounded-xl p-6 w-full max-w-md mx-4">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-xl font-bold text-gray-900">Withdraw Funds</h3>
+<button onclick="closeModal('withdraw')" class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600">
+<i class="ri-close-line text-xl"></i>
+</button>
+</div>
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Withdrawal Method</label>
+<div class="grid grid-cols-2 gap-3">
+<button class="flex items-center justify-center p-3 border border-gray-300 rounded-lg hover:border-primary hover:bg-blue-50 transition-colors">
+<div class="w-6 h-6 flex items-center justify-center mr-2">
+<i class="ri-bank-line text-primary"></i>
+</div>
+<span class="text-sm font-medium">Bank</span>
+</button>
+<button class="flex items-center justify-center p-3 border border-gray-300 rounded-lg hover:border-primary hover:bg-blue-50 transition-colors">
+<div class="w-6 h-6 flex items-center justify-center mr-2">
+<i class="ri-wallet-3-line text-primary"></i>
+</div>
+<span class="text-sm font-medium">Wallet</span>
+</button>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Amount (USDT)</label>
+<input type="number" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="0.00" min="10" step="0.01">
+<p class="text-xs text-gray-500 mt-1">Available: $8,450.00</p>
+</div>
+<div class="bg-gray-50 rounded-lg p-4">
+<div class="flex justify-between text-sm">
+<span class="text-gray-600">Processing Fee:</span>
+<span class="text-gray-900">$5.00</span>
+</div>
+<div class="flex justify-between text-sm font-medium mt-2">
+<span class="text-gray-900">You will receive:</span>
+<span class="text-gray-900">$95.00</span>
+</div>
+</div>
+<button class="w-full bg-secondary text-white px-4 py-3 !rounded-button font-medium hover:bg-opacity-90 transition-colors whitespace-nowrap">
+Confirm Withdrawal
+</button>
+</div>
+</div>
+</div>
+<script id="modal-controls">
+function openModal(type) {
+const modal = document.getElementById(type + 'Modal');
+if (modal) {
+modal.classList.remove('hidden');
+document.body.style.overflow = 'hidden';
+}
+}
+function closeModal(type) {
+const modal = document.getElementById(type + 'Modal');
+if (modal) {
+modal.classList.add('hidden');
+document.body.style.overflow = 'auto';
+}
+}
+document.addEventListener('DOMContentLoaded', function() {
+const modals = document.querySelectorAll('[id$="Modal"]');
+modals.forEach(modal => {
+modal.addEventListener('click', function(e) {
+if (e.target === modal) {
+modal.classList.add('hidden');
+document.body.style.overflow = 'auto';
+}
+});
+});
+});
+</script>
+<script id="trading-calculator">
+document.addEventListener('DOMContentLoaded', function() {
+const buyAmountInput = document.getElementById('buyAmount');
+const buyReceiveDisplay = document.getElementById('buyReceive');
+const sellAmountInput = document.getElementById('sellAmount');
+const sellReceiveDisplay = document.getElementById('sellReceive');
+if (buyAmountInput && buyReceiveDisplay) {
+buyAmountInput.addEventListener('input', function() {
+const amount = parseFloat(this.value) || 0;
+const coins = amount * 1;
+buyReceiveDisplay.textContent = `${coins.toFixed(0)} CTP`;
+});
+}
+if (sellAmountInput && sellReceiveDisplay) {
+sellAmountInput.addEventListener('input', function() {
+const coins = parseFloat(this.value) || 0;
+const usdt = coins * 2;
+sellReceiveDisplay.textContent = `$${usdt.toFixed(2)} USDT`;
+});
+}
+});
+</script>
+<!-- Login Modal -->
+<div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center">
+<div class="bg-white rounded-xl p-8 w-full max-w-md mx-4 hover-scale">
+<div class="text-center mb-8">
+<h3 class="text-2xl font-bold text-gray-900 mb-2">Welcome Back!</h3>
+<p class="text-gray-600">Enter your credentials to access your account</p>
+</div>
+<div class="space-y-6">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+<div class="relative">
+<div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-mail-line"></i>
+</div>
+</div>
+<input type="email" class="modern-input w-full pl-12 pr-4 py-3 rounded-lg text-gray-900" placeholder="your@email.com">
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+<div class="relative">
+<div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-lock-line"></i>
+</div>
+</div>
+<input type="password" class="modern-input w-full pl-12 pr-4 py-3 rounded-lg text-gray-900" placeholder="••••••••">
+</div>
+</div>
+<div class="flex items-center justify-between">
+<label class="flex items-center space-x-2 cursor-pointer">
+<input type="checkbox" class="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary">
+<span class="text-sm text-gray-600">Remember me</span>
+</label>
+<a href="#" class="text-sm text-primary hover:text-primary/80 transition-colors">Forgot password?</a>
+</div>
+<button class="w-full bg-primary text-white px-6 py-3 !rounded-button font-medium hover:bg-opacity-90 transition-colors whitespace-nowrap hover:shadow-lg hover:-translate-y-0.5">
+Sign In
+</button>
+<div class="relative">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-gray-200"></div>
+</div>
+<div class="relative flex justify-center text-sm">
+<span class="px-4 bg-white text-gray-500">Or continue with</span>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-3">
+<button class="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:border-gray-400 transition-colors">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-google-fill text-[#4285F4]"></i>
+</div>
+</button>
+<button class="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:border-gray-400 transition-colors">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-apple-fill text-[#000000]"></i>
+</div>
+</button>
+<button class="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:border-gray-400 transition-colors">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-facebook-fill text-[#1877F2]"></i>
+</div>
+</button>
+</div>
+<p class="text-center text-sm text-gray-600">
+Don't have an account?
+<button onclick="switchModal('login', 'register')" class="text-primary hover:text-primary/80 transition-colors font-medium">Sign up</button>
+</p>
+</div>
+<button onclick="closeModal('login')" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors">
+<i class="ri-close-line text-xl"></i>
+</button>
+</div>
+</div>
+<!-- Register Modal -->
+<div id="registerModal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center">
+<div class="bg-white rounded-xl p-8 w-full max-w-md mx-4 hover-scale">
+<div class="text-center mb-8">
+<h3 class="text-2xl font-bold text-gray-900 mb-2">Create Account</h3>
+<p class="text-gray-600">Join SmartCash and start trading today</p>
+</div>
+<div class="space-y-6">
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+<input type="text" class="modern-input w-full px-4 py-3 rounded-lg text-gray-900" placeholder="John">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+<input type="text" class="modern-input w-full px-4 py-3 rounded-lg text-gray-900" placeholder="Davis">
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+<div class="relative">
+<div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-mail-line"></i>
+</div>
+</div>
+<input type="email" class="modern-input w-full pl-12 pr-4 py-3 rounded-lg text-gray-900" placeholder="your@email.com">
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+<div class="relative">
+<div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-lock-line"></i>
+</div>
+</div>
+<input type="password" class="modern-input w-full pl-12 pr-4 py-3 rounded-lg text-gray-900" placeholder="••••••••">
+</div>
+<p class="mt-2 text-xs text-gray-500">Must be at least 8 characters long</p>
+</div>
+<div>
+<label class="flex items-center space-x-2 cursor-pointer">
+<input type="checkbox" class="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary">
+<span class="text-sm text-gray-600">I agree to the <a href="#" class="text-primary hover:text-primary/80 transition-colors">Terms of Service</a> and <a href="#" class="text-primary hover:text-primary/80 transition-colors">Privacy Policy</a></span>
+</label>
+</div>
+<button class="w-full bg-primary text-white px-6 py-3 !rounded-button font-medium hover:bg-opacity-90 transition-colors whitespace-nowrap hover:shadow-lg hover:-translate-y-0.5">
+Create Account
+</button>
+<div class="relative">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-gray-200"></div>
+</div>
+<div class="relative flex justify-center text-sm">
+<span class="px-4 bg-white text-gray-500">Or continue with</span>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-3">
+<button class="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:border-gray-400 transition-colors">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-google-fill text-[#4285F4]"></i>
+</div>
+</button>
+<button class="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:border-gray-400 transition-colors">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-apple-fill text-[#000000]"></i>
+</div>
+</button>
+<button class="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:border-gray-400 transition-colors">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-facebook-fill text-[#1877F2]"></i>
+</div>
+</button>
+</div>
+<p class="text-center text-sm text-gray-600">
+Already have an account?
+<button onclick="switchModal('register', 'login')" class="text-primary hover:text-primary/80 transition-colors font-medium">Sign in</button>
+</p>
+</div>
+<button onclick="closeModal('register')" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors">
+<i class="ri-close-line text-xl"></i>
+</button>
+</div>
+</div>
+<script id="auth-modal-controls">
+function switchModal(from, to) {
+closeModal(from);
+setTimeout(() => openModal(to), 100);
+}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<script id="chart-initialization">
+document.addEventListener('DOMContentLoaded', function() {
+    const chartDom = document.getElementById('priceChart');
+    const myChart = echarts.init(chartDom);
+    
+    const dates = [];
+    const prices = [];
+    const basePrice = 2100;
+    const now = new Date();
+    
+    for(let i = 30; i >= 0; i--) {
+        const date = new Date(now);
+        date.setDate(date.getDate() - i);
+        dates.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+        
+        const randomChange = (Math.random() - 0.5) * 100;
+        prices.push((basePrice + randomChange).toFixed(2));
+    }
+
+    const option = {
+        animation: false,
+        tooltip: {
+            trigger: 'axis',
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            borderColor: 'rgba(255, 255, 255, 0.9)',
+            textStyle: {
+                color: '#1f2937'
+            },
+            formatter: function(params) {
+                return `${params[0].name}<br/>Price: $${params[0].value}`;
+            }
+        },
+        grid: {
+            top: '5%',
+            left: '3%',
+            right: '3%',
+            bottom: '5%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'category',
+            data: dates,
+            axisLine: {
+                lineStyle: {
+                    color: '#e5e7eb'
+                }
+            },
+            axisLabel: {
+                color: '#6b7280'
+            }
+        },
+        yAxis: {
+            type: 'value',
+            axisLine: {
+                show: false
+            },
+            axisLabel: {
+                color: '#6b7280',
+                formatter: '${value}'
+            },
+            splitLine: {
+                lineStyle: {
+                    color: '#f3f4f6'
+                }
+            }
+        },
+        series: [{
+            data: prices,
+            type: 'line',
+            smooth: true,
+            symbol: 'none',
+            lineStyle: {
+                color: '#57b5e7',
+                width: 3
+            },
+            areaStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                    offset: 0,
+                    color: 'rgba(87, 181, 231, 0.2)'
+                }, {
+                    offset: 1,
+                    color: 'rgba(87, 181, 231, 0.02)'
+                }])
+            }
+        }]
+    };
+
+    myChart.setOption(option);
+    
+    window.addEventListener('resize', function() {
+        myChart.resize();
+    });
+});
+</script>
+<script>
+    !function (t, e) { var o, n, p, r; e.__SV || (window.posthog = e, e._i = [], e.init = function (i, s, a) { function g(t, e) { var o = e.split("."); 2 == o.length && (t = t[o[0]], e = o[1]), t[e] = function () { t.push([e].concat(Array.prototype.slice.call(arguments, 0))) } } (p = t.createElement("script")).type = "text/javascript", p.crossOrigin = "anonymous", p.async = !0, p.src = s.api_host.replace(".i.posthog.com", "-assets.i.posthog.com") + "/static/array.js", (r = t.getElementsByTagName("script")[0]).parentNode.insertBefore(p, r); var u = e; for (void 0 !== a ? u = e[a] = [] : a = "posthog", u.people = u.people || [], u.toString = function (t) { var e = "posthog"; return "posthog" !== a && (e += "." + a), t || (e += " (stub)"), e }, u.people.toString = function () { return u.toString(1) + ".people (stub)" }, o = "init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "), n = 0; n < o.length; n++)g(u, o[n]); e._i.push([i, s, a]) }, e.__SV = 1) }(document, window.posthog || []);
+    posthog.init('phc_t9tkQZJiyi2ps9zUYm8TDsL6qXo4YmZx0Ot5rBlAlEd', {
+        api_host: 'https://us.i.posthog.com',
+        autocapture: false,
+        capture_pageview: false,
+        capture_pageleave: false,
+        capture_performance: {
+            web_vitals: false,
+        },
+        rageclick: false,
+    })
+    window.shareKey = 'mhWkUKNEbKzT6lm4KzWxFQ';
+    window.host = 'readdy.ai';
+</script>
+<script src="https://static.readdy.ai/static/share.js"></script></body>
+</html>
